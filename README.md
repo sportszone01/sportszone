@@ -128,6 +128,7 @@ for(let i=0;i<60;i++){
 
   <div id="football" class="sport-content active">
     <h2>Football</h2>
+    <button>Live Matches</button>
     <button>Upcoming Matches</button>
     <button>Player Profile</button>
     <button>Polls</button>
@@ -137,6 +138,7 @@ for(let i=0;i<60;i++){
 
   <div id="cricket" class="sport-content">
     <h2>Cricket</h2>
+    <button>Live Matches</button>
     <button>Upcoming Matches</button>
     <button>Player Profile</button>
     <button>Polls</button>
@@ -146,6 +148,7 @@ for(let i=0;i<60;i++){
 
   <div id="badminton" class="sport-content">
     <h2>Badminton</h2>
+    <button>Live Matches</button>
     <button>Upcoming Matches</button>
     <button>Player Profile</button>
     <button>Polls</button>
@@ -155,6 +158,7 @@ for(let i=0;i<60;i++){
 
   <div id="hockey" class="sport-content">
     <h2>Hockey</h2>
+    <button>Live Matches</button>
     <button>Upcoming Matches</button>
     <button>Player Profile</button>
     <button>Polls</button>
@@ -164,6 +168,7 @@ for(let i=0;i<60;i++){
 
   <div id="chess" class="sport-content">
     <h2>Chess</h2>
+    <button>Live Matches</button>
     <button>Upcoming Tournaments</button>
     <button>Player Profile</button>
     <button>Polls</button>
@@ -173,6 +178,7 @@ for(let i=0;i<60;i++){
 
   <div id="tennis" class="sport-content">
     <h2>Tennis</h2>
+    <button>Live Matches</button>
     <button>Upcoming Matches</button>
     <button>Player Profile</button>
     <button>Polls</button>
@@ -182,6 +188,7 @@ for(let i=0;i<60;i++){
 
   <div id="basketball" class="sport-content">
     <h2>Basketball</h2>
+    <button>Live Matches</button>
     <button>Upcoming Matches</button>
     <button>Player Profile</button>
     <button>Polls</button>
@@ -202,3 +209,4 @@ function showSport(sport){
 </script>
 </body>
 </html>
+
