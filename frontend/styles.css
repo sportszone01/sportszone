@@ -1,0 +1,149 @@
+:root {
+  color-scheme: light;
+  --bg: #0b1220;
+  --panel: #121b2f;
+  --text: #e7eefc;
+  --muted: #b0bdd8;
+  --accent: #4f8cff;
+  --accent-soft: #93b5ff;
+  --border: #25324f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: radial-gradient(circle at top, #1a2b4f, var(--bg) 45%);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.hero,
+main {
+  width: min(980px, 92vw);
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  padding: 64px 0 36px;
+}
+
+.eyebrow {
+  color: var(--accent-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+}
+
+h1 {
+  margin: 0 auto 16px;
+  max-width: 900px;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+}
+
+.subtitle {
+  margin: 0 auto;
+  max-width: 760px;
+  color: var(--muted);
+}
+
+.hero-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: 11px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-secondary {
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.trust-note {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.grid article,
+.card {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.featured {
+  border-color: var(--accent);
+}
+
+pre {
+  overflow-x: auto;
+  background: #081025;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  color: #cde0ff;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.inline {
+  margin-top: 8px;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .panel {
+    padding: 18px;
+  }
+}

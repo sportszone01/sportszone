@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Zone Reliability Layer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">Sports Zone Infrastructure</p>
+    <h1>Turn Any Third-Party API Into a Reliable, Production-Ready Endpoint in 5 Minutes</h1>
+    <p class="subtitle">Add authentication, rate limits, caching, fallback protection, and usage analytics in front of any external API — without building gateway infrastructure from scratch.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#pricing">Start Free</a>
+      <a class="btn btn-secondary" href="#quickstart">View 2-Minute Quickstart</a>
+    </div>
+    <p class="trust-note">No credit card required • Free tier included</p>
+  </header>
+
+  <main>
+    <section class="panel" id="problem">
+      <h2>The Problem</h2>
+      <p>Third-party APIs fail. They timeout. They rate limit unexpectedly. They change response formats. They go down during peak traffic.</p>
+      <ul>
+        <li>Your product breaks.</li>
+        <li>Your users churn.</li>
+        <li>Your team scrambles.</li>
+      </ul>
+      <p>Small SaaS teams don’t have time to build gateway infrastructure from scratch.</p>
+    </section>
+
+    <section class="panel" id="solution">
+      <h2>The Solution</h2>
+      <p>A lightweight reliability layer that sits between your app and any upstream API.</p>
+      <ol>
+        <li>Point us to your upstream API.</li>
+        <li>Get a protected reliability endpoint instantly.</li>
+        <li>Monitor usage, errors, and performance in one place.</li>
+      </ol>
+      <p class="muted">No DevOps overhead. No enterprise complexity.</p>
+    </section>
+
+    <section class="panel" id="features">
+      <h2>What You Get</h2>
+      <div class="grid">
+        <article>API key authentication + instant revocation</article>
+        <article>Per-key rate limits &amp; monthly quotas</article>
+        <article>Smart caching with configurable TTL</article>
+        <article>Timeout control + automatic fallback</article>
+        <article>Usage metrics (requests, errors, cache hit rate)</article>
+        <article>Health endpoint + observability</article>
+      </div>
+      <p>You control reliability — even if the upstream doesn’t.</p>
+    </section>
+
+    <section class="panel" id="quickstart">
+      <h2>2-Minute Quickstart</h2>
+      <pre><code>curl -sS -X POST http://127.0.0.1:8000/admin/create-key \
+  -H 'Content-Type: application/json' \
+  -H 'x-admin-token: dev-admin-token' \
+  -d '{"userId":"founder-1","plan":"free"}'
+
+curl -sS 'http://127.0.0.1:8000/api/matches?sport=cricket' \
+  -H 'x-api-key: &lt;API_KEY&gt;'</code></pre>
+    </section>
+
+    <section class="panel" id="pricing">
+      <h2>Pricing (Simple &amp; Predictable)</h2>
+      <div class="pricing-grid">
+        <article class="card">
+          <h3>Free</h3>
+          <ul>
+            <li>1 integration</li>
+            <li>5,000 requests/month</li>
+            <li>Basic metrics</li>
+            <li>Community support</li>
+          </ul>
+        </article>
+        <article class="card featured">
+          <h3>Pro — $29/month</h3>
+          <ul>
+            <li>Multiple integrations</li>
+            <li>100,000 requests/month</li>
+            <li>Higher rate limits</li>
+            <li>Priority support</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Business</h3>
+          <ul>
+            <li>Custom limits</li>
+            <li>Dedicated support</li>
+            <li>Optional private deployment</li>
+          </ul>
+        </article>
+      </div>
+      <a class="btn btn-primary inline" href="#">Start Free →</a>
+    </section>
+
+    <section class="panel" id="icp">
+      <h2>Who This Is For</h2>
+      <ul>
+        <li>Indie hackers shipping SaaS products</li>
+        <li>Agencies building client dashboards</li>
+        <li>Small product teams integrating external APIs</li>
+        <li>AI tools relying on third-party services</li>
+      </ul>
+      <p>If you depend on external APIs but don’t want to build gateway infra — this is for you.</p>
+    </section>
+
+    <section class="panel" id="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Is this a full API gateway?</summary>
+        <p>No. It’s intentionally focused on reliability, limits, caching, and metrics — without enterprise complexity.</p>
+      </details>
+      <details>
+        <summary>Do I need to migrate my backend?</summary>
+        <p>No. Replace your upstream URL with your reliability endpoint.</p>
+      </details>
+      <details>
+        <summary>Does it support any API?</summary>
+        <p>Yes — any HTTP-based REST API.</p>
+      </details>
+      <details>
+        <summary>Can I upgrade later?</summary>
+        <p>Yes. Plans scale with your usage.</p>
+      </details>
+    </section>
+  </main>
+</body>
+</html>
