@@ -1,0 +1,9 @@
+{
+  "name": "sports-zone",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sports Zone demo app with a local Node.js backend",
+  "scripts": {
+    "start": "node backend/server.js"
+  }
+}

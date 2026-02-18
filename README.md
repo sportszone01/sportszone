@@ -1,212 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sports Section</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    overflow-x: hidden;
-    background-color: #5F9EA0; /* slightly darker soft blue */
-  }
+# Sports Zone 🏆
 
-  /* Fixed emojis */
-  .emoji {
-    position: absolute;
-    font-size: 2rem;
-    opacity: 0.25;
-    pointer-events: none;
-  }
+A simple sports dashboard with tabbed sections, auto-refreshing live match lists, and a local Node.js backend.
 
-  h1 {
-    text-align: center;
-    font-size: 3rem;
-    margin: 20px 0;
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  }
+## Features
+- Tabs for Football, Cricket, Badminton, Hockey, Chess, Tennis, Basketball
+- Simple JavaScript tab switching
+- Responsive layout
+- `Load Live Matches` action that fetches data dynamically
+- `Start Auto Refresh` action (30-second interval)
+- Protected backend endpoint: `GET /api/matches?sport=<sport-name>` (requires `x-api-key`)
+- API usage endpoint: `GET /api/usage` (per-key usage counters)
+- Admin endpoints: `POST /admin/create-key`, `POST /admin/revoke-key`
+- Observability endpoint: `GET /api/metrics` (cache + upstream counters)
+- Health endpoint: `GET /api/health` (status, uptime, memory usage)
+- Optional upstream API proxy support via environment variable
+- In-memory backend caching (default TTL: 30 seconds per sport)
 
-  .sport-container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(192,128,129,0.4);
-    position: relative;
-    z-index: 2;
-  }
+## Tech Used
+- HTML
+- CSS
+- JavaScript (Vanilla)
+- Node.js (built-in `http` module)
 
-  /* Tabs */
-  .sport-tabs button {
-    background: linear-gradient(135deg, #16a085, #1abc9c);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin: 5px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
+## Project Structure
+- `frontend/index.html` – page markup and content sections
+- `frontend/styles.css` – visual styles and responsive rules
+- `frontend/script.js` – tab switching, fetch logic, auto-refresh behavior
+- `backend/server.js` – static file server + API key auth + rate limiting + proxy/fallback
+- `package.json` – npm scripts
 
-  .sport-tabs button:hover {
-    background: linear-gradient(135deg, #138d75, #16a085);
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  }
+## Run Locally (Step-by-step)
+1. Verify Node.js and npm are installed:
+   ```bash
+   node -v
+   npm -v
+   ```
+2. Move into the project folder:
+   ```bash
+   cd path/to/sports-zone
+   ```
+3. Install dependencies (safe even when none are required):
+   ```bash
+   npm install
+   ```
+4. Start the server:
+   ```bash
+   npm start
+   ```
+5. Open in browser:
+   - `http://localhost:8000` for the app (frontend uses default demo key automatically)
+   - `http://localhost:8000/api/metrics` for cache/observability counters
+   - `http://localhost:8000/api/health` for health/uptime/memory details
 
-  .sport-tabs button.active {
-    background: linear-gradient(135deg, #C08081, #A05252);
-  }
+6. Create your own API key and call protected endpoints:
+   ```bash
+   curl -sS -X POST http://127.0.0.1:8000/admin/create-key \
+     -H 'Content-Type: application/json' \
+     -H 'x-admin-token: dev-admin-token' \
+     -d '{"userId":"founder-1","plan":"free"}'
+   ```
 
-  .sport-content {
-    display: none;
-    margin-top: 20px;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-  }
+   Then call matches (replace `<API_KEY>`):
+   ```bash
+   curl -sS 'http://127.0.0.1:8000/api/matches?sport=cricket' \
+     -H 'x-api-key: <API_KEY>'
+   ```
 
-  .sport-content.active {
-    display: block;
-    opacity: 1;
-  }
+   Get per-key usage:
+   ```bash
+   curl -sS 'http://127.0.0.1:8000/api/usage' \
+     -H 'x-api-key: <API_KEY>'
+   ```
 
-  /* Light maroon buttons for content */
-  .sport-content button {
-    background-color: #C08081;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    margin: 5px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
-  }
+Stop the server with `Ctrl + C`.
 
-  .sport-content button:hover {
-    background-color: #A05252;
-    transform: scale(1.05);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-  }
-</style>
-</head>
-<body>
+## Optional Configuration
+Use environment variables when starting the app:
 
-<!-- 60+ fixed emojis scattered randomly -->
-<script>
-const emojis = ["⚽","🏀","🏏","🏸","🏑","🎾","🏐","🏉","🥊","⛳","🏹","🥋","🤺","🏂","⛸️","🏌️‍♂️","🏄‍♂️","🚴‍♂️","🏇","🏊‍♂️","🤽‍♂️","🤾‍♂️","🏸","⚾","🥎","🏹","🏒","🎯"];
-for(let i=0;i<60;i++){
-  const div = document.createElement("div");
-  div.className="emoji";
-  div.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
-  div.style.top = (Math.random()*window.innerHeight)+"px";
-  div.style.left = (Math.random()*window.innerWidth)+"px";
-  div.style.fontSize = (Math.random()*30+20)+"px"; 
-  div.style.opacity = (Math.random()*0.3+0.2);
-  document.body.appendChild(div);
-}
-</script>
+```bash
+CACHE_TTL_MS=30000 SPORTS_API_TIMEOUT_MS=4000 npm start
+```
 
-<h1>Sports Zone</h1>
+Security and plan controls:
 
-<div class="sport-container">
-  <div class="sport-tabs">
-    <button class="active" onclick="showSport('football')">Football</button>
-    <button onclick="showSport('cricket')">Cricket</button>
-    <button onclick="showSport('badminton')">Badminton</button>
-    <button onclick="showSport('hockey')">Hockey</button>
-    <button onclick="showSport('chess')">Chess</button>
-    <button onclick="showSport('tennis')">Tennis</button>
-    <button onclick="showSport('basketball')">Basketball</button>
-  </div>
+```bash
+ADMIN_TOKEN='replace-me' RATE_LIMIT_FREE_PER_MIN=60 MONTHLY_QUOTA_FREE=5000 npm start
+```
 
-  <div id="football" class="sport-content active">
-    <h2>Football</h2>
-    <button>Live Matches</button>
-    <button>Upcoming Matches</button>
-    <button>Player Profile</button>
-    <button>Polls</button>
-    <button>Latest News</button>
-    <p>Some Football news and highlights can be shown here.</p>
-  </div>
+Use upstream proxy mode:
 
-  <div id="cricket" class="sport-content">
-    <h2>Cricket</h2>
-    <button>Live Matches</button>
-    <button>Upcoming Matches</button>
-    <button>Player Profile</button>
-    <button>Polls</button>
-    <button>Latest News</button>
-    <p>Cricket updates, scores, and player stats can be added here.</p>
-  </div>
+```bash
+SPORTS_API_URL='https://example.com/live-matches' npm start
+```
 
-  <div id="badminton" class="sport-content">
-    <h2>Badminton</h2>
-    <button>Live Matches</button>
-    <button>Upcoming Matches</button>
-    <button>Player Profile</button>
-    <button>Polls</button>
-    <button>Latest News</button>
-    <p>Badminton events, player rankings, and news can go here.</p>
-  </div>
+The backend attempts upstream first and automatically falls back to local sample data if upstream fails.
 
-  <div id="hockey" class="sport-content">
-    <h2>Hockey</h2>
-    <button>Live Matches</button>
-    <button>Upcoming Matches</button>
-    <button>Player Profile</button>
-    <button>Polls</button>
-    <button>Latest News</button>
-    <p>Hockey matches, team updates, and player info can be shown here.</p>
-  </div>
+## Troubleshooting
+- **Port already in use**: set a different port before start:
+  ```bash
+  PORT=3000 npm start
+  ```
+- **Command not found (`node`/`npm`)**: install Node.js from https://nodejs.org
+- **Module errors**: run `npm install` again
+- **API not responding**: verify server logs and test with:
+  ```bash
+  curl -sS http://127.0.0.1:8000/api/health
+  ```
 
-  <div id="chess" class="sport-content">
-    <h2>Chess</h2>
-    <button>Live Matches</button>
-    <button>Upcoming Tournaments</button>
-    <button>Player Profile</button>
-    <button>Polls</button>
-    <button>Latest News</button>
-    <p>Chess tournaments, grandmasters, and strategies updates go here.</p>
-  </div>
+## Publish to GitHub
+If your work is only local and not showing on GitHub yet, connect this repository to your GitHub remote and push the branch you are currently on.
 
-  <div id="tennis" class="sport-content">
-    <h2>Tennis</h2>
-    <button>Live Matches</button>
-    <button>Upcoming Matches</button>
-    <button>Player Profile</button>
-    <button>Polls</button>
-    <button>Latest News</button>
-    <p>Tennis matches, player stats, and tournaments info can go here.</p>
-  </div>
+1. Check your current branch and remotes:
 
-  <div id="basketball" class="sport-content">
-    <h2>Basketball</h2>
-    <button>Live Matches</button>
-    <button>Upcoming Matches</button>
-    <button>Player Profile</button>
-    <button>Polls</button>
-    <button>Latest News</button>
-    <p>Basketball scores, NBA updates, and player highlights can go here.</p>
-  </div>
-</div>
+```bash
+git branch --show-current
+git remote -v
+```
 
-<script>
-function showSport(sport){
-  const contents = document.querySelectorAll('.sport-content');
-  contents.forEach(c=>c.classList.remove('active'));
-  const buttons = document.querySelectorAll('.sport-tabs button');
-  buttons.forEach(b=>b.classList.remove('active'));
-  document.getElementById(sport).classList.add('active');
-  event.target.classList.add('active');
-}
-</script>
-</body>
-</html>
+2. Save your current branch name so push commands stay branch-agnostic:
 
+```bash
+CURRENT_BRANCH=$(git branch --show-current)
+```
+
+3. If no `origin` exists yet, add it and push:
+
+```bash
+git remote add origin https://github.com/<your-username>/<your-repo>.git
+git push -u origin "$CURRENT_BRANCH"
+```
+
+4. If `origin` already exists but points to the wrong repo, update it and push:
+
+```bash
+git remote set-url origin https://github.com/<your-username>/<your-repo>.git
+git push -u origin "$CURRENT_BRANCH"
+```
+
+5. Verify it is live on GitHub:
+
+```bash
+git remote get-url origin
+git ls-remote --heads origin
+```
+
+## Business Roadmap
+If you are turning this project into a product, see `BUSINESS_MVP.md` for:
+- reliability-layer positioning
+- ICP and lean MVP scope
+- pricing starter model
+- 30-day go-to-market plan
+- landing page copy + outreach template
+
+## Future Improvements
+- Add scorecards and match status metadata
+- Add backend caching/rate limiting
+- Add persistence (favorites/recent matches)
